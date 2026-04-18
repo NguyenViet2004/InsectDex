@@ -1,0 +1,15 @@
+names:
+  0: ant
+  1: butterfly
+  2: cockroach
+  3: dragonfly
+  4: fly
+  5: grasshopper
+  6: honeybee
+  7: ladybug
+  8: mosquito
+  9: spider
+path: /kaggle/input/datasets/nguyenviet2709/data-yolo-v1/dataset_yolo
+test: images/test
+train: images/train
+val: images/val
