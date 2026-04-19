@@ -1,72 +1,69 @@
-# TỔNG HỢP CHỨC NĂNG VÀ CÔNG VIỆC ĐÃ THỰC HIỆN
-Dự án: **Thế Giới Nhỏ Kỳ Diệu** (Ứng dụng giáo dục khám phá thế giới côn trùng)
+# BÁO CÁO TỔNG QUAN TÍNH NĂNG VÀ KIẾN TRÚC HỆ THỐNG
+**Tên dự án:** Ứng dụng AI Nhận diện Côn trùng dành cho Trẻ em
+**Nền tảng:** Mobile App (Android - Capacitor / ReactJS) & Cloud MLOps
 
 ---
 
-## PHẦN 1: CÁC CHỨC NĂNG HỆ THỐNG ĐÃ HOÀN THIỆN (FEATURES)
+## PHẦN 1: TỔNG QUAN CÁC CHỨC NĂNG THEO GIAO DIỆN (FRONTEND)
 
-### 1. Xác thực & Quản lý người dùng
-- **Đăng nhập/Đăng ký**: Hỗ trợ đăng nhập an toàn bằng tài khoản Google hoặc chế độ "Chơi ngay" (Guest/Local user) lưu dữ liệu tạm thời trên máy.
-- **Hồ sơ cá nhân (Profile)**: Hiển thị tên người dùng, ảnh đại diện (avatar hoạt hình), và tổng số điểm tích lũy.
-- **Đăng xuất**: Xóa phiên đăng nhập hiện tại và trở về màn hình chào mừng.
+Ứng dụng được thiết kế tối ưu UI/UX dành riêng cho trẻ em với các hoạ tiết thiên nhiên, phông chữ lớn và thân thiện.
 
-### 2. Quét & Nhận diện côn trùng bằng AI (Tính năng cốt lõi)
-- **Giao diện Camera**: Cho phép người dùng mở camera trực tiếp trên thiết bị web/mobile để chụp ảnh.
-- **Nhận diện thông minh (Gemini AI)**: Tích hợp AI để phân tích hình ảnh vừa chụp, tự động nhận diện loài côn trùng và trích xuất thông tin khoa học.
-- **Màn hình Kết quả (Result Screen)**: Hiển thị thông tin chi tiết về loài côn trùng vừa tìm thấy.
-- **Hệ thống phần thưởng (Gamification)**: Tự động cộng điểm thưởng (ví dụ: +10 điểm) vào tài khoản khi khám phá thành công một loài mới.
+### 1. Màn hình Cổng Vào (Auth Screen)
+- **Đăng nhập / Đăng ký truyền thống:** Yêu cầu sử dụng Email của phụ huynh để đăng ký nhằm tuân thủ quy định bảo vệ quyền riêng tư của trẻ em (COPPA). 
+- **Thiết lập Avatar & Tên:** Trẻ em có thể tự tải ảnh đại diện nhân vật yêu thích.
+- **Quên mật khẩu:** Gửi tín hiệu về email phụ huynh để reset mật khẩu.
+- *Lưu ý bảo mật:* Hệ thống cố tình loại bỏ công cụ Đăng nhập bằng Google/Mạng xã hội (SSO) để ngăn chặn việc thu thập dữ liệu hành vi của trẻ trên không gian mạng và đảm bảo App hoạt động trơn tru trong mọi môi trường Sandbox (WebView) của điện thoại di động.
 
-### 3. Bộ sưu tập / Từ điển sinh học (Library)
-- **Lưu trữ thành tích**: Hiển thị danh sách các loài côn trùng mà người dùng đã khám phá và thu thập được.
-- **Kiến thức bách khoa**: Cung cấp thông tin chi tiết, dễ hiểu cho trẻ em về từng loài (Tên gọi, môi trường sống, vai trò sinh thái...).
+### 2. Màn hình Sảnh Chính (Dashboard)
+- **Hệ thống Điểm thưởng & Cấp bậc:** Hiển thị điểm số, số lượng côn trùng đã khám phá để kích thích sự tò mò và thi đua của trẻ.
+- **Bảng điều hướng:** Điều hướng mượt mà đến các chức năng Quét AI và Viện bảo tàng.
 
-### 4. Bảng xếp hạng thi đua (Leaderboard/Rank)
-- **Xếp hạng điểm số**: Hiển thị danh sách các "Thám hiểm nhí" có điểm số cao nhất trong hệ thống để tạo động lực thi đua.
+### 3. Màn hình Khám Phá AI (Camera & Máy Quét AI)
+- **Chụp ảnh trực tiếp / Tải ảnh từ thư viện:** Giao diện camera tích hợp, cho phép các bé chụp côn trùng ngoài vườn.
+- **Xử lý Ảnh (Inference):** Gửi ảnh đến máy chủ AI (Hugging Face / YOLO) để chẩn đoán.
+- **Kết quả Sinh học:** Trả về Tên côn trùng, Đặc tính, Độ nguy hiểm, Thức ăn yêu thích. Cập nhật thẳng vào bộ sưu tập cá nhân của trẻ.
+
+### 4. Màn hình Viện Bảo Tàng (Collection Screen)
+- **Lưu trữ Thành tựu:** Hiển thị danh sách các loài côn trùng thẻ bài bé đã thu thập được.
+- **Trạng thái "Chờ nghiên cứu" (Unknown):** Đối với các côn trùng hệ thống AI hiện tại chưa nhận diện được, ứng dụng sẽ dán nhãn "Côn Trùng Bí Ẩn" (Unknown). Đây là điểm kích hoạt cho toàn bộ hệ thống lõi MLOps ở Phần 2.
 
 ---
 
-## PHẦN 2: CHI TIẾT CÁC CÔNG VIỆC KỸ THUẬT ĐÃ LÀM (WORK COMPLETED)
+## PHẦN 2: KIẾN TRÚC LÕI (BACKEND & TỰ ĐỘNG HOÁ MLOPS)
 
-### 1. Khởi tạo & Cấu hình dự án
-- Thiết lập dự án Frontend với **ReactJS (Vite)** và **TypeScript**.
-- Cài đặt và cấu hình **Tailwind CSS** để style giao diện nhanh chóng.
-- Thiết lập file `.env.example` để quản lý các biến môi trường (Gemini API, Supabase URL/Key).
-- Cấu hình `metadata.json` để yêu cầu quyền truy cập Camera của thiết bị.
+Đây là giá trị cốt lõi và phức tạp nhất của Đồ án. Hệ thống không chỉ dừng lại ở việc gọi API có sẵn, mà xây dựng một **Chu trình Huấn luyện Mô hình Máy học Liên tục (Continuous Training - CI/CT/CD)** hoàn toàn tự động, phân tán qua nhiều nền tảng Cloud.
 
-### 2. Phát triển Giao diện & Trải nghiệm người dùng (UI/UX)
-- Thiết kế layout theo hướng **Mobile-first**, mô phỏng màn hình điện thoại với viền bo tròn và hình nền chủ đề thiên nhiên (màu xanh lá, icon hoa lá).
-- Xây dựng hệ thống Component hoàn chỉnh cho các màn hình:
-  - `SplashScreen.tsx`: Màn hình chờ sinh động lúc khởi động.
-  - `AuthScreen.tsx`: Màn hình đăng nhập.
-  - `MainScreen.tsx`: Màn hình chính (Dashboard) với các nút điều hướng lớn, dễ bấm.
-  - `ScanScreen.tsx`: Màn hình tích hợp luồng mở camera và chụp ảnh.
-  - `ResultScreen.tsx`: Màn hình hiển thị kết quả nhận diện từ AI.
-  - `LibraryScreen.tsx`: Màn hình danh sách bộ sưu tập.
-  - `RankScreen.tsx`: Màn hình bảng xếp hạng.
-  - `ProfileScreen.tsx`: Màn hình hồ sơ cá nhân.
-- Tích hợp thư viện **`motion/react`** để làm hiệu ứng chuyển trang (transition), hiệu ứng xuất hiện (fade-in, slide-up) mượt mà.
-- Tích hợp thư viện **`lucide-react`** cho hệ thống icon đồng bộ.
-- Xây dựng hệ thống **Toast Notification** (thông báo nổi) tùy chỉnh để báo lỗi, báo thành công hoặc thông tin.
+### 1. Cơ sở dữ liệu đám mây (Supabase / PostgreSQL)
+- **Đóng vai trò Trái tim:** Quản lý toàn bộ thông tin tài khoản (Auth) và Cơ sở dữ liệu (Database).
+- **Storage:** Lưu trữ hình ảnh côn trùng mà trẻ em chụp được.
+- **Bảng `collections`:** Ghi nhận mọi kết quả AI. Nếu AI không nhận diện được ảnh, dữ liệu sẽ được lưu với trường `insect_id = "unknown_insect"`. Supabase đóng vai trò Data Lake để đào tạo lại mô hình.
 
-### 3. Tích hợp AI (Trí tuệ nhân tạo)
-- Viết service `geminiService.ts` sử dụng SDK `@google/genai`.
-- Xây dựng prompt (câu lệnh) chuyên biệt để AI nhận diện hình ảnh côn trùng và trả về dữ liệu chuẩn (Tên, đặc điểm, độ hiếm...).
+### 2. Trạm điều phối Tự động (Databricks)
+- **Đóng vai trò Bộ não (Orchestrator):** Databricks được thiết lập một Daemon Job (Chạy định kỳ - Cron Scheduler).
+- **Quy trình hoạt động:** Định kỳ (VD: Mỗi 1 tiếng), Databricks Notebook lẳng lặng thức dậy, bắn API vào Supabase để quét toàn bộ Data.
+- **Bộ lọc thông minh:** Nếu phát hiện có dữ liệu `insect_id == "unknown_insect"` (Có côn trùng lạ mới mà AI hiện tại chưa biết), Databricks sẽ ra quyết định: *"Cần phải tiến hành huấn luyện AI nhồi thêm kiến thức mới"*.
+- *Script Python tại Databricks sử dụng Kaggle API để "kích điện" máy chủ GPU của Kaggle hoạt động.*
 
-### 4. Thiết lập Cơ sở dữ liệu & Backend
-- **Tích hợp Firebase**:
-  - Cấu hình `firebase.ts` kết nối với Firebase.
-  - Tích hợp Firebase Authentication (Google Login).
-  - Tích hợp Firestore Database để lưu trữ dữ liệu người dùng (Profile) theo thời gian thực (`onSnapshot`).
-  - Xử lý các hàm bắt lỗi (Error Boundary) chuẩn của Firestore.
-- **Chuẩn bị hạ tầng Supabase (PostgreSQL)**:
-  - Viết file `supabase.ts` để khởi tạo client kết nối.
-  - Viết file `supabase-schema.sql` hoàn chỉnh bao gồm:
-    - Tạo các bảng: `users`, `insects`, `collections`.
-    - Đổ dữ liệu mẫu (Seed data) cho các loài côn trùng cơ bản (Bọ rùa, Bướm, Ong, Chuồn chuồn, Kiến).
-    - Thiết lập bảo mật **Row Level Security (RLS)** và các **Policies** phân quyền đọc/ghi dữ liệu chặt chẽ.
+### 3. Trạm Huấn luyện Máy Học GPU (Kaggle)
+- **Đóng vai trò Cỗ máy Huấn luyện nặng (Training Node):** Khi nhận được lệnh giật điện từ Databricks, Kaggle API sẽ tự động `kernels_pull` và `kernels_push` một Notebook tự động (Auto-Train YOLO).
+- **Quy trình Tự học:** 
+  1. Notebook trên Kaggle sử dụng Máy ảo tăng tốc GPU (P100/T4) để download toàn bộ ảnh côn trùng lạ từ Supabase.
+  2. Gắn nhãn tự động (Pseudo-labeling hoặc Transfer Learning).
+  3. Bắt đầu Train đè lên file Trọng số (Weights) cũ của YOLOv8.
+  4. Sau khoảng 20-30 phút Train xong, sinh ra file Não mới thông minh hơn: `best.pt`.
+  5. Cửa hậu (Backdoor): Kaggle tự động ném file `best.pt` này chạy thẳng lên Hugging Face Repo.
 
-### 5. Xử lý Logic luồng ứng dụng
-- Quản lý State toàn cục trong `App.tsx` (quản lý phiên đăng nhập, thông tin user, màn hình hiện tại).
-- Xử lý logic cấp quyền và bật/tắt luồng video từ Camera thiết bị.
-- Xử lý logic lưu trữ tạm thời (Local Storage) cho người dùng chọn chế độ "Chơi ngay" không cần đăng nhập.
-- Xử lý luồng: Chụp ảnh -> Gửi ảnh dạng Base64 lên AI -> Nhận kết quả -> Cập nhật điểm số -> Lưu vào bộ sưu tập.
+### 4. Trạm Máy chủ API Suy luận (Hugging Face Spaces)
+- **Đóng vai trò Giao tiếp thiết bị đầu cuối (Inference API):** Nơi host mã nguồn Python FastAPI và mô hình `best.pt`. 
+- Khi file `best.pt` mới được Kaggle đập vào Repo, Hugging Face Space sẽ tự động **Bắt tính hiệu Restart** (Xây dựng và khởi động lại Server).
+- Quá trình cập nhật Não AI mới khép lại, Server hoạt động bình thường chờ những bức ảnh tiếp theo từ App Mobile gửi tới.
+
+---
+
+## TÓM TẮT VÒNG LẶP DỮ LIỆU ĐÓNG (DATA FLYWHEEL)
+1. **Trẻ em (Mobile App):** Chụp một con bọ lạ ngoài vườn chưa từng có trong hệ thống.
+2. **Supabase:** Nhận ảnh, không nhận diện được $\rightarrow$ Lưu trạng thái "Bọ Lạ".
+3. **Databricks:** Nửa đêm thức dậy, phát hiện có "Bọ Lạ" $\rightarrow$ Báo động cho Kaggle.
+4. **Kaggle (GPU):** Tự động bật máy lạnh, lấy ảnh bọ lạ về dạy cho AI YOLO. Học xong, đóng gói "Não bộ YOLO mới" ném lên mạng.
+5. **Hugging Face:** Nhận Não mới, tự khởi động lại trạm thu phát.
+6. **Sáng hôm sau:** Trẻ em mở App, hình ảnh Bọ Lạ hôm qua tự động được đổi tên thành loài côn trùng chính xác. Mô hình cứ thế thông minh lên từng ngày dựa trên 100% Cấu trúc Serverless (Không cần con người can thiệp hay thuê máy chủ duy trì đắt đỏ).
