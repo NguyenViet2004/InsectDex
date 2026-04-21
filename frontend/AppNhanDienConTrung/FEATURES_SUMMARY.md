@@ -49,7 +49,7 @@
 - **Quy trình Tự học:** 
   1. Notebook trên Kaggle sử dụng Máy ảo tăng tốc GPU (P100/T4) để download toàn bộ ảnh côn trùng lạ từ Supabase.
   2. Gắn nhãn tự động (Pseudo-labeling hoặc Transfer Learning).
-  3. Bắt đầu Train đè lên file Trọng số (Weights) cũ của YOLOv8.
+  3. Bắt đầu Train đè lên file Trọng số (Weights) cũ của YOLO11m.
   4. Sau khoảng 20-30 phút Train xong, sinh ra file Não mới thông minh hơn: `best.pt`.
   5. Cửa hậu (Backdoor): Kaggle tự động ném file `best.pt` này chạy thẳng lên Hugging Face Repo.
 
