@@ -38,7 +38,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    // Check for local user first
     const localUserStr = localStorage.getItem('local_user');
     if (localUserStr) {
       try {
@@ -72,15 +71,13 @@ export default function App() {
             image_cartoon: 'https://cdn-icons-png.flaticon.com/512/1864/1864520.png'
           }]);
         }
-      } catch (e) {
-        // Ignore if it already exists or fails
-      }
+      } catch (e) {}
     };
 
     const handleSession = async (session: any) => {
       ensureUnknownInsectExists();
       setUser(session?.user || null);
-      
+
       if (!session?.user) {
         currentUserId = null;
         if (channel) {
@@ -109,12 +106,11 @@ export default function App() {
         if (existingProfile) {
           setProfile(existingProfile as UserProfile);
         } else if (fetchError && fetchError.code === 'PGRST116') {
-          // Not found, create new profile
           const newProfile: UserProfile = {
             uid: session.user.id,
             username: session.user.user_metadata?.full_name || 'Thám hiểm nhí',
             total_points: 0,
-            avatar_id: 1, // Default avatar
+            avatar_id: 1,
             role: 'user'
           };
           await supabase.from('users').insert([newProfile]);
@@ -123,16 +119,18 @@ export default function App() {
           console.error("Error fetching profile:", fetchError);
         }
 
-        // Real-time profile listener
         if (channel) {
           supabase.removeChannel(channel);
         }
         channel = supabase.channel(`profile_${session.user.id}_${Date.now()}`)
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'users', filter: `uid=eq.${session.user.id}` }, (payload) => {
-            setProfile(payload.new as UserProfile);
-          })
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'users', filter: `uid=eq.${session.user.id}` },
+            (payload) => {
+              setProfile(payload.new as UserProfile);
+            }
+          )
           .subscribe();
-
       } catch (err) {
         console.error("Session handling error:", err);
       } finally {
@@ -141,17 +139,32 @@ export default function App() {
     };
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      handleSession(session);
-      // Check if URL has recovery token
-      if (window.location.hash.includes('type=recovery')) {
+      const pendingReset = sessionStorage.getItem('pending_password_reset') === 'true';
+      if (pendingReset) {
         setIsRecoveringPassword(true);
+        setLoading(false);
+        return;
       }
+
+      handleSession(session);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY') {
+      // Sửa lỗi: Nhận diện biến cờ trong bộ nhớ tạm để chặn trước khi load MainApp
+      const isPendingReset = sessionStorage.getItem('pending_password_reset') === 'true';
+
+      if (event === 'PASSWORD_RECOVERY' || isPendingReset) {
+        sessionStorage.setItem('pending_password_reset', 'true');
         setIsRecoveringPassword(true);
+        setLoading(false);
+        return; // cực quan trọng: chặn không cho handleSession chạy tiếp => Ngăn nó nảy vào MainApp
       }
+
+      if (event === 'SIGNED_OUT') {
+        sessionStorage.removeItem('pending_password_reset');
+        setIsRecoveringPassword(false);
+      }
+
       handleSession(session);
     });
 
@@ -204,14 +217,15 @@ export default function App() {
         <div className="absolute top-1/4 -right-5 text-6xl opacity-20 pointer-events-none select-none">🌼</div>
 
         <div className="h-full w-full max-w-[430px] max-h-[932px] bg-[#C1E1C1] nature-bg overflow-hidden flex flex-col font-sans relative shadow-2xl sm:rounded-[3rem] sm:border-[12px] border-green-900/20">
-          <UpdatePasswordScreen 
+          <UpdatePasswordScreen
             onBack={() => {
+              sessionStorage.removeItem('pending_password_reset');
               setIsRecoveringPassword(false);
               window.location.hash = '';
-            }} 
+            }}
             onToast={showToast}
           />
-          
+
           <AnimatePresence>
             {toast && (
               <motion.div
@@ -221,13 +235,13 @@ export default function App() {
                 className="absolute bottom-12 left-6 right-6 z-[100]"
               >
                 <div className={`rounded-2xl p-4 shadow-2xl flex items-center gap-3 border-2 ${
-                  toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 
-                  toast.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 
+                  toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+                  toast.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
                   'bg-white border-blue-100 text-blue-800'
                 }`}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    toast.type === 'error' ? 'bg-red-100' : 
-                    toast.type === 'success' ? 'bg-green-100' : 
+                    toast.type === 'error' ? 'bg-red-100' :
+                    toast.type === 'success' ? 'bg-green-100' :
                     'bg-blue-50'
                   }`}>
                     <Bell className="w-5 h-5" />

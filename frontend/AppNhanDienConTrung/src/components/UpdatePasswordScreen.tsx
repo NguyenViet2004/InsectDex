@@ -12,29 +12,55 @@ export default function UpdatePasswordScreen({ onBack, onToast }: Props) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // const handleUpdatePassword = async () => {
+  //   if (!password) {
+  //     onToast("Bố mẹ hãy nhập mật khẩu mới nhé!", "info");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   try {
+  //     const { error } = await supabase.auth.updateUser({ password });
+  //     if (error) throw error;
+
+  //     await supabase.auth.signOut();
+  //     onToast("Đổi mật khẩu thành công! Bố mẹ hãy dùng mật khẩu mới để bé đăng nhập nhé.", "success");
+  //     onBack();
+  //   } catch (error: any) {
+  //     console.error("Update password error:", error);
+  //     onToast(error?.message || "Có lỗi xảy ra, bố mẹ thử lại nhé!", "error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleUpdatePassword = async () => {
     if (!password) {
       onToast("Bố mẹ hãy nhập mật khẩu mới nhé!", "info");
       return;
     }
+
     setLoading(true);
     try {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        throw new Error("Link đã hết hạn hoặc session đã mất.");
+      }
+
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
-      
-      // Đăng xuất ngay lập tức để không tự động vào app
+
+      sessionStorage.removeItem('pending_password_reset');
       await supabase.auth.signOut();
-      
+
       onToast("Đổi mật khẩu thành công! Bố mẹ hãy dùng mật khẩu mới để bé đăng nhập nhé.", "success");
       onBack();
     } catch (error: any) {
       console.error("Update password error:", error);
-      onToast("Có lỗi xảy ra, bố mẹ thử lại nhé!", "error");
+      onToast(error?.message || "Có lỗi xảy ra, bố mẹ thử lại nhé!", "error");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="h-full w-full bg-[#C1E1C1] nature-bg flex flex-col items-center justify-center p-6 relative">
       <motion.div

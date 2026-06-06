@@ -1,6 +1,11 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "Thiếu_API_Key_Rồi"; 
+
+// 3. Khởi tạo an toàn
+export const ai = new GoogleGenAI({ 
+    apiKey: apiKey 
+});
 
 export interface RecognitionResult {
   insect_id: string;
