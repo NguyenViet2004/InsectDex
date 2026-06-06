@@ -52,6 +52,7 @@ Dự án: **Thế Giới Nhỏ Kỳ Diệu** (Ứng dụng giáo dục khám ph�
 - Viết service `geminiService.ts` sử dụng SDK `@google/genai`.
 - Xây dựng prompt (câu lệnh) chuyên biệt để AI nhận diện hình ảnh côn trùng và trả về dữ liệu chuẩn (Tên, đặc điểm, độ hiếm...).
 
+<<<<<<< HEAD
 ### 4. Thiết lập Cơ sở dữ liệu & Backend
 - **Tích hợp Firebase**:
   - Cấu hình `firebase.ts` kết nối với Firebase.
@@ -64,6 +65,16 @@ Dự án: **Thế Giới Nhỏ Kỳ Diệu** (Ứng dụng giáo dục khám ph�
     - Tạo các bảng: `users`, `insects`, `collections`.
     - Đổ dữ liệu mẫu (Seed data) cho các loài côn trùng cơ bản (Bọ rùa, Bướm, Ong, Chuồn chuồn, Kiến).
     - Thiết lập bảo mật **Row Level Security (RLS)** và các **Policies** phân quyền đọc/ghi dữ liệu chặt chẽ.
+=======
+### 3. Trạm Huấn luyện Máy Học GPU (Kaggle)
+- **Đóng vai trò Cỗ máy Huấn luyện nặng (Training Node):** Khi nhận được lệnh giật điện từ Databricks, Kaggle API sẽ tự động `kernels_pull` và `kernels_push` một Notebook tự động (Auto-Train YOLO).
+- **Quy trình Tự học:** 
+  1. Notebook trên Kaggle sử dụng Máy ảo tăng tốc GPU (P100/T4) để download toàn bộ ảnh côn trùng lạ từ Supabase.
+  2. Gắn nhãn tự động (Pseudo-labeling hoặc Transfer Learning).
+  3. Bắt đầu Train đè lên file Trọng số (Weights) cũ của YOLO11m.
+  4. Sau khoảng 20-30 phút Train xong, sinh ra file Não mới thông minh hơn: `best.pt`.
+  5. Cửa hậu (Backdoor): Kaggle tự động ném file `best.pt` này chạy thẳng lên Hugging Face Repo.
+>>>>>>> ef0ce8ddcaef1dc5784b2a1675388e77f45b3003
 
 ### 5. Xử lý Logic luồng ứng dụng
 - Quản lý State toàn cục trong `App.tsx` (quản lý phiên đăng nhập, thông tin user, màn hình hiện tại).
