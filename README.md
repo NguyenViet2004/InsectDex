@@ -67,7 +67,7 @@ A key technical component of this project is the **unknown insect improvement lo
 
 | Home | Camera Scan | Recognition Result | Collection |
 |---|---|---|---|
-| ![Home](docs/app_home.png) | ![Camera](docs/app_scan.png) | ![Result](docs/app_result.png) | ![Collection](docs/app_collection.png) |
+| ![Home](docs/app_login.png) | ![Camera](docs/app_scan.png) | ![Result](docs/app_result.png) | ![Collection](docs/app_collection.png) |
 
 | System Architecture | Cloud MLOps Pipeline |
 |---|---|
