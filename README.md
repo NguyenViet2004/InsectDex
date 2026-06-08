@@ -67,11 +67,11 @@ A key technical component of this project is the **unknown insect improvement lo
 
 | Home | Camera Scan | Recognition Result | Collection |
 |---|---|---|---|
-| ![Home](docs/images/app_home.png) | ![Camera](docs/images/app_camera.png) | ![Result](docs/images/app_result.png) | ![Collection](docs/images/app_collection.png) |
+| ![Home](docs/app_home.png) | ![Camera](docs/app_scan.png) | ![Result](docs/app_result.png) | ![Collection](docs/app_collection.png) |
 
 | System Architecture | Cloud MLOps Pipeline |
 |---|---|
-| ![System Architecture](docs/images/system_architecture.png) | ![MLOps Pipeline](docs/images/mlops_pipeline.png) |
+| ![System Architecture](docs/system_architecture.png) | ![MLOps Pipeline](docs/mlops_pipeline.png) |
 
 ---
 
@@ -491,8 +491,7 @@ Candidate models should not replace the production model unless they pass the de
 |---|---|
 | Nguyễn Quốc Việt | 22715451 |
 | Ngô Bình Xuyên | 22717111 |
-
-**Supervisor:** Nguyễn Hữu Vũ  
+ 
 **Course:** Service-Oriented Architecture and Cloud Computing  
 **University:** Industrial University of Ho Chi Minh City
 
